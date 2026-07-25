@@ -1,12 +1,17 @@
 # secure_ml_on_ridge_regression
 
-Secure machine unlearning using homomorphic encryption and the Sherman-Morrison formula. This repository implements a protocol that allows a data owner to remove the influence of specific training points from a ridge regression model without revealing the model weights or the data to the server.
+This repository implements an experimental framework for evaluating the accuracy and feasibility of performing machine unlearning on ridge regression models using homomorphic encryption. The framework simulates a secure unlearning protocol where a server performs Sherman-Morrison updates on encrypted data points provided by a client, without the server learning the actual values of the removed points.
+
+The implementation serves as a benchmark to measure:
+- The numerical error introduced by homomorphic encryption and polynomial approximations
+- The disagreement between encrypted unlearning and exact retraining
+- The accuracy degradation after removing multiple training points
 
 ## Overview
 
 The system consists of three main components:
 
-1. **Data Preparation**: Python script that loads datasets from OpenML, trains ridge regression models, computes the inverse Hessian, and prepares encrypted inputs
+1. **Data Preparation**: Python script that loads datasets from OpenML, trains ridge regression models, computes the inverse Hessian, and chooses the unlearned points according to a random seed
 2. **Homomorphic Unlearning**: C++ program using Microsoft SEAL that performs encrypted Sherman-Morrison updates with Remez polynomial approximation for division
 3. **Analysis**: Python script that analyzes results, compares encrypted unlearning with exact retraining, and generates statistical reports
 
@@ -44,7 +49,7 @@ sudo apt-get install sollya
 
 ### Stage 1: Data Preparation
 
-The Python script loads datasets using OpenML task splits from the paper "Why do decision trees outperform neural networks on tabular data?" (https://proceedings.neurips.cc/paper_files/paper/2022/hash/0378c7692da36807bdec87ab043cdadc-Abstract-Datasets_and_Benchmarks.html) and prepares all necessary data for the homomorphic protocol.
+The Python script loads datasets using OpenML task splits from the Numerical Classification Benchmark (https://www.openml.org/search?type=benchmark&study_type=task&sort=tasks_included&id=337) of the paper "Why do decision trees outperform neural networks on tabular data?" (https://proceedings.neurips.cc/paper_files/paper/2022/hash/0378c7692da36807bdec87ab043cdadc-Abstract-Datasets_and_Benchmarks.html) and prepares all necessary data for the homomorphic protocol.
 
 example:
 ```bash
@@ -64,6 +69,27 @@ python ridge_intervallo_diretto.py \
 - `--max_train_size`: Maximum training samples (default: 50000)
 - `--output_dir`: Output directory (auto-generated as "risultati_ridge_openml_dataset_<dataset_id>" if not specified)
 
+**Supported Datasets:**
+
+| Dataset ID | Dataset Name | Task ID | Type |
+|------------|--------------|---------|------|
+| 44089 | credit | 361600 | Classification |
+| 44090 | california | 361056 | Regression |
+| 44091 | wine | 361057 | Classification |
+| 44120 | electricity | 361601 | Classification |
+| 44121 | covertype | 361602 | Classification |
+| 44122 | pol | 361603 | Classification |
+| 44123 | house_16H | 361604 | Classification |
+| 44125 | MagicTelescope | 361605 | Classification |
+| 44126 | bank-marketing | 361606 | Classification |
+| 44127 | phoneme | 361067 | Classification |
+| 44128 | MiniBooNE | 361607 | Classification |
+| 44129 | Higgs | 361608 | Classification |
+| 44130 | eye_movements | 361609 | Classification |
+| 44131 | jannis | 361071 | Classification |
+
+In our experiments, we restrict our analysis to a subset of these datasets, namely electricity, covertype, pol, house_16H, MagicTelescope, bank-marketing, MiniBooNE, and jannis. These datasets were selected because the initial ridge regression model achieves a sufficiently high baseline accuracy, making them suitable for evaluating the impact of unlearning on model performance. 
+
 **What the script does:**
 
 1. Loads dataset using OpenML task splits
@@ -82,8 +108,6 @@ python ridge_intervallo_diretto.py \
 - `hessian_inverse.txt`: Hessian inverse in diagonal format (padded to power of two)
 - `coefficienti_remez.txt`: Remez polynomial coefficients for the specified degree
 - `parametri.txt`: Experiment parameters
-- `bounds_teorici.txt`: Theoretical error bounds
-- `w_retrain.txt`: Model retrained without selected points
 - `X_train_scaled.txt`, `y_train.txt`: Scaled training data
 - `X_test.txt`, `y_test.txt`: Test data
 - `indices_*.txt`: Various index files
