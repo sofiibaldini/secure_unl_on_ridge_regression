@@ -1,4 +1,4 @@
-# secure_ml_on_ridge_regression
+# secure_unl_on_ridge_regression
 
 This repository implements an experimental framework for evaluating the accuracy and feasibility of performing machine unlearning on ridge regression models using homomorphic encryption. The framework simulates a secure unlearning protocol where a server performs Sherman-Morrison updates on encrypted data points provided by a client, without the server learning the actual values of the removed points.
 
