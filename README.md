@@ -74,7 +74,6 @@ python ridge_intervallo_diretto.py \
 | Dataset ID | Dataset Name | Task ID | Type |
 |------------|--------------|---------|------|
 | 44089 | credit | 361600 | Classification |
-| 44090 | california | 361056 | Regression |
 | 44091 | wine | 361057 | Classification |
 | 44120 | electricity | 361601 | Classification |
 | 44121 | covertype | 361602 | Classification |
