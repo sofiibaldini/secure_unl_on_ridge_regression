@@ -216,4 +216,6 @@ python test_vari_benchmark.py \
 - `confronto_retraining_accuracy_dataset_Y.png`: Accuracy comparison plot
 - `risultati_analisi_dataset_Y.txt`: Detailed numerical results
 - `tabella_accuracy_riassuntiva.csv`: Summary table across all datasets
+- `tempi_dataset_Y.csv`: Execution time per point, for every seed and degree
+- `tempo_per_punto_confronto_dataset.png`: Cross-dataset comparison of mean execution time per point, with datasets ordered by increasing number of features
 
