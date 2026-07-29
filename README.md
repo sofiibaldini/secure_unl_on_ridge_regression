@@ -53,7 +53,7 @@ The Python script loads datasets using OpenML task splits from the Numerical Cla
 
 example:
 ```bash
-python ridge_intervallo_diretto.py \
+python preprocessing.py \
     --dataset_id 44120 \
     --n_punti 100 \
     --seed 42 \
@@ -165,13 +165,13 @@ For each point to be removed:
 Analyze results across multiple seeds and degrees.
 
 ```bash
-python test_vari_benchmark.py \
+python tests.py \
     --dataset_ids <id> ... <id> \
 ```
 
 example:
 ```bash
-python test_vari_benchmark.py \
+python tests.py \
     --dataset_ids 44120 44121 44122 \
 ```
 
