@@ -115,6 +115,7 @@ In our experiments, we restrict our analysis to a subset of these datasets, name
 ### Stage 2: Homomorphic Unlearning
 
 Compile the C++ program and run it for each seed.
+**Note:** The SEAL include path (`-I/usr/local/include/SEAL-4.0`) may vary depending on your system and installation method. Adjust this path according to your SEAL installation (e.g., `/usr/include/seal/` etc.).
 
 ```bash
 # Compile
@@ -148,7 +149,7 @@ For each point to be removed:
 3. Computes $u = H^{-1} x$ and $v = H^{-1} \Delta$ using diagonal packing
 4. Computes $\beta = x^T u$ and $\alpha = x^T v$
 5. Approximates $p = 1/(1-\beta)$ using the Remez polynomial
-6. Computes $\text{term} = \alpha \cdot p \cdot u$
+6. Computes $\text{term} = mathbf{v} + \alpha \cdot p \cdot u$
 7. Decrypts and saves the update $\Delta w = \text{term}$
 8. Updates $H^{-1} \leftarrow H^{-1} + p \cdot u \cdot u^T$
 
